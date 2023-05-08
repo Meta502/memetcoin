@@ -13,7 +13,7 @@ const NEIGHBOR_PORTS = argv[Flag.NEIGHBOR_PORTS]
   .split(",")
   .filter((port: number) => port != NODE_PORT)
 
-const log_file = fs.createWriteStream(__dirname + `/logs/node-${NODE_PORT}.log`, { flags: 'w' });
+const log_file = fs.createWriteStream(process.cwd() + `/logs/node-${NODE_PORT}.log`, { flags: 'w' });
 const log_stdout = process.stdout;
 
 console.log = function(d) {
@@ -28,4 +28,10 @@ const udpSocket = initUdpSocket(
 const expressApp = initHttpServer(
   NODE_PORT
 )
+
+setInterval(() => {
+  NEIGHBOR_PORTS.forEach((item: number) => {
+    udpSocket.send("Heartbeat", item)
+  })
+}, 10000)
 

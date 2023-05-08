@@ -1,4 +1,6 @@
 import express, { Request, Response } from "express"
+import fs from "fs"
+import path from "path"
 
 const initHttpServer = (port: number) => {
   const app = express()
@@ -6,7 +8,11 @@ const initHttpServer = (port: number) => {
   app.set("view engine", "ejs")
 
   app.get("/", (_: Request, res: Response) => {
-    res.render("pages/index")
+    const log = fs.readFileSync(process.cwd() + `/logs/node-${port}.log`)
+
+    res.render("pages/index", {
+      log
+    })
   })
 
   app.listen(port, () => {
