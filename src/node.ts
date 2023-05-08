@@ -1,6 +1,10 @@
 import minimist from "minimist"
 import util from "util"
 import fs from "fs"
+import crypto from "crypto"
+
+import sha256 from "sha256"
+import RIPEMD160 from "ripemd160"
 
 import { Flag } from "./constants";
 import initUdpSocket from "./utils/initUdpSocket";
@@ -21,12 +25,32 @@ console.log = function(d) {
   log_stdout.write(util.format(d) + '\n');
 };
 
+const { privateKey, publicKey } = crypto.generateKeyPairSync('ec', {
+  namedCurve: 'sect233k1',
+  publicKeyEncoding: {
+    type: 'spki',
+    format: 'der'
+  },
+  privateKeyEncoding: {
+    type: 'pkcs8',
+    format: 'der',
+  }
+});
+
+const address = new RIPEMD160().update(sha256(publicKey.toString("base64"))).digest("hex")
+
 const udpSocket = initUdpSocket(
-  NODE_PORT
+  NODE_PORT,
+  privateKey,
+  publicKey,
+  address,
 )
 
 const expressApp = initHttpServer(
-  NODE_PORT
+  NODE_PORT,
+  privateKey,
+  publicKey,
+  address,
 )
 
 setInterval(() => {

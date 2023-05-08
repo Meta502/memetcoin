@@ -2,7 +2,7 @@ import express, { Request, Response } from "express"
 import fs from "fs"
 import path from "path"
 
-const initHttpServer = (port: number) => {
+const initHttpServer = (port: number, privateKey: any, publicKey: any, address: string) => {
   const app = express()
 
   app.set("view engine", "ejs")
@@ -11,7 +11,10 @@ const initHttpServer = (port: number) => {
     const log = fs.readFileSync(process.cwd() + `/logs/node-${port}.log`)
 
     res.render("pages/index", {
-      log
+      log,
+      address,
+      privateKey: privateKey.toString("base64"),
+      publicKey: publicKey.toString("base64"),
     })
   })
 

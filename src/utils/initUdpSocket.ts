@@ -1,6 +1,6 @@
 import dgram from "node:dgram"
 
-const initUdpSocket = (port: number) => {
+const initUdpSocket = (port: number, privateKey: any, publicKey: any, address: string) => {
   const server = dgram.createSocket("udp4");
 
   server.on("error", (err) => {

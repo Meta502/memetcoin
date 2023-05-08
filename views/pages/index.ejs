@@ -22,6 +22,17 @@
       </a> 
     </div>
 
+    <div class="grid grid-cols-1 gap-8 text-white"> 
+      <div class="bg-gray-800 w-full rounded-xl p-4 space-y-2">
+        <h2 class="font-bold">
+          Public Address
+        </h2>
+        <h3 class="text-4xl text-blue-200 space-y-2">
+          <%= address %>
+        </h3>
+      </div>
+    </div>
+
     <div class="grid grid-cols-3 gap-8 text-white">
       <div class="bg-gray-800 w-full rounded-xl p-4 space-y-2">
         <h2 class="font-bold">
@@ -53,9 +64,7 @@
         <h2 class="font-bold">
           Logs
         </h2>
-        <pre class="max-h-96 overflow-y-auto break-words whitespace-break-spaces flex flex-col-reverse">
-          <%= log %>
-        </pre>
+        <pre class="max-h-96 overflow-y-auto break-words whitespace-break-spaces flex flex-col-reverse"><%= log %></pre>
     </div>
   </body>
 </html>
