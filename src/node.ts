@@ -37,7 +37,7 @@ const { privateKey, publicKey } = crypto.generateKeyPairSync('ec', {
   }
 });
 
-const address = new RIPEMD160().update(sha256(publicKey.toString("base64"))).digest("hex")
+const address = new RIPEMD160().update(sha256(publicKey.toString("base64"))).digest("base64")
 
 const udpSocket = initUdpSocket(
   NODE_PORT,
