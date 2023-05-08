@@ -39,18 +39,21 @@ const { privateKey, publicKey } = crypto.generateKeyPairSync('ec', {
 
 const address = new RIPEMD160().update(sha256(publicKey.toString("base64"))).digest("base64")
 
+const nodeDetails = {
+  privateKey,
+  publicKey,
+  address,
+}
+
+
 const udpSocket = initUdpSocket(
   NODE_PORT,
-  privateKey,
-  publicKey,
-  address,
+  nodeDetails,
 )
 
-const expressApp = initHttpServer(
+initHttpServer(
   NODE_PORT,
-  privateKey,
-  publicKey,
-  address,
+  nodeDetails,
 )
 
 setInterval(() => {

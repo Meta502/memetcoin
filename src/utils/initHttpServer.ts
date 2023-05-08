@@ -1,8 +1,7 @@
 import express, { Request, Response } from "express"
 import fs from "fs"
-import path from "path"
 
-const initHttpServer = (port: number, privateKey: any, publicKey: any, address: string) => {
+const initHttpServer = (port: number, { privateKey, publicKey, address }) => {
   const app = express()
 
   app.set("view engine", "ejs")
@@ -16,6 +15,10 @@ const initHttpServer = (port: number, privateKey: any, publicKey: any, address: 
       privateKey: privateKey.toString("base64"),
       publicKey: publicKey.toString("base64"),
     })
+  })
+
+  app.get("/blocks", (_: Request, res: Response) => {
+    res.render("pages/blocks")
   })
 
   app.listen(port, () => {
