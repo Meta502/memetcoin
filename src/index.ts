@@ -4,8 +4,6 @@ import path from "path"
 
 import { Flag } from "./constants"
 
-
-
 const argv = minimist(process.argv.slice(2))
 const nodePath = path.resolve(__dirname, 'node.js')
 

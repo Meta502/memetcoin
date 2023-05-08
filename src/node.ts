@@ -1,4 +1,6 @@
 import minimist from "minimist"
+import util from "util"
+import fs from "fs"
 
 import { Flag } from "./constants";
 import initUdpSocket from "./utils/initUdpSocket";
@@ -11,16 +13,19 @@ const NEIGHBOR_PORTS = argv[Flag.NEIGHBOR_PORTS]
   .split(",")
   .filter((port: number) => port != NODE_PORT)
 
+const log_file = fs.createWriteStream(__dirname + `/logs/node-${NODE_PORT}.log`, { flags: 'w' });
+const log_stdout = process.stdout;
+
+console.log = function(d) {
+  log_file.write(util.format(d) + '\n');
+  log_stdout.write(util.format(d) + '\n');
+};
+
 const udpSocket = initUdpSocket(
   NODE_PORT
 )
 
-initHttpServer(
+const expressApp = initHttpServer(
   NODE_PORT
 )
 
-setInterval(() => {
-  NEIGHBOR_PORTS.forEach((item: number) => {
-    udpSocket.send("Ping!", item)
-  })
-}, 1000)

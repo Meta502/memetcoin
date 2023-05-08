@@ -14,7 +14,7 @@ const initUdpSocket = (port: number) => {
 
   server.on("listening", () => {
     const { address, port } = server.address()
-    console.log(`[INFO] (${address},${port}): Start listening to UDP messages`)
+    console.log(`[INFO] (${address}, ${port}): Start listening to UDP messages`)
   })
 
   server.bind(
