@@ -21,6 +21,10 @@ const initHttpServer = (port: number, { privateKey, publicKey, address }) => {
     res.render("pages/blocks")
   })
 
+  app.get("/transactions", (_: Request, res: Response) => {
+    res.render("pages/transactions")
+  })
+
   app.listen(port, () => {
     console.log(`[INFO] Server listening to HTTP requests on port ${port}`)
   })

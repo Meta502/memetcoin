@@ -1,0 +1,56 @@
+<html>
+  <head>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+
+  <body class="bg-gray-900 p-16 space-y-6">
+    <h1 class="text-2xl font-bold text-white">
+      Proof Of Work Simulator
+    </h1>
+
+    <div class="flex space-x-3">
+      <a href="/" class="bg-purple-700 transition-all duration-350 hover:bg-purple-800 text-white px-4 py-2 rounded-lg">
+        Home
+      </a>
+
+      <a href="/blocks" class="bg-green-700 transition-all duration-350 hover:bg-green-800 text-white px-4 py-2 rounded-lg">
+        Blocks
+      </a> 
+
+      <a href="/transactions" class="bg-blue-700 transition-all duration-350 hover:bg-blue-800 text-white px-4 py-2 rounded-lg">
+        Pending Transactions
+      </a> 
+    </div>
+
+    <div class="grid grid-cols-1 gap-8 text-white"> 
+      <h2 class="font-bold text-2xl">
+        Pending Transactions
+      </h2>
+      <div class="bg-gray-800 w-full rounded-xl p-4 space-y-2">
+        <div class="space-y-2">
+          <h2 class="font-bold">Transaction Hash</h2>
+          <p>
+            <span class="text-purple-300 font-mono bg-gray-800 py-0.5 rounded-lg">ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb</span>
+          </p>
+        </div>
+        <hr>
+        <div class="space-y-2">
+          <div class="flex space-x-8 bg-gray-700 px-4 py-2 rounded-lg">
+            <div>
+              <p class="font-bold">Sender</p>
+              <p>U0odCjgp+jd2WciD2wrB+bWQsm4=</p>
+            </div>
+            <div>
+              <p class="font-bold">Recipient</p>
+              <p>U0odCjgp+jd2WciD2wrB+bWQsm4=</p>
+            </div>
+            <div>
+              <p class="font-bold">Amount</p>
+              <p>5</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
