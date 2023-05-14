@@ -4,7 +4,9 @@ export default function calculateBlockHash(
   index: number,
   previousHash: string,
   timestamp: number,
-  data: string
+  data: string,
+  difficulty: number,
+  nonce: number,
 ): string {
-  return sha256(index + previousHash + timestamp + data)
+  return sha256(index + previousHash + timestamp + data + difficulty + nonce)
 }

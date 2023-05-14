@@ -13,6 +13,8 @@ export default function deserializeBlockchain(chain: any[]) {
       item.previousHash,
       item.timestamp,
       item.data,
+      item.difficulty,
+      item.nonce,
     )
   })
 }

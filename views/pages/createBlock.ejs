@@ -1,0 +1,57 @@
+<html>
+  <head>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+
+  <body class="bg-gray-900 p-16 space-y-6">
+    <h1 class="text-2xl font-bold text-white">
+      Proof Of Work Simulator
+    </h1>
+
+    <div class="flex space-x-3">
+      <a href="/" class="bg-purple-700 transition-all duration-350 hover:bg-purple-800 text-white px-4 py-2 rounded-lg">
+        Home
+      </a>
+
+      <a href="/blocks" class="bg-green-700 transition-all duration-350 hover:bg-green-800 text-white px-4 py-2 rounded-lg">
+        Blocks
+      </a> 
+
+      <a href="/transactions" class="bg-blue-700 transition-all duration-350 hover:bg-blue-800 text-white px-4 py-2 rounded-lg">
+        Pending Transactions
+      </a> 
+    </div>
+
+    <div class="grid grid-cols-1 gap-8 text-white"> 
+      <h2 class="font-bold text-2xl">
+        Verified Blocks
+      </h2>
+
+      <% for (block of blockchain) { %>
+        <div class="bg-gray-800 w-full rounded-xl p-4 space-y-2">
+          <div class="space-y-2">
+            <h2 class="font-bold">
+              Block #<%= block.index %>
+            </h2>
+            <p>
+              <span class="font-medium">Hash:</span> 
+              <span class="text-purple-300 font-mono bg-gray-800 py-0.5 px-1 rounded-lg">
+                <%= block.hash %>
+              </span>
+            </p>
+            <p>
+              <span class="font-medium">Timestamp:</span> 
+              <span class="text-purple-300 font-mono bg-gray-800 py-0.5 px-1 rounded-lg">
+                <%= new Date(block.timestamp) %>
+              </span>
+            </p>
+          </div>
+          <hr>
+          <div class="space-y-2">
+            <%= block.data %>
+          </div>
+        </div>
+      <% } %>
+    </div>
+  </body>
+</html>

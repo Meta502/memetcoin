@@ -1,14 +1,22 @@
-import calculateBlockHash from "./calculateBlockHash";
 import { Block } from "../../schema/block";
-import { blockchain, getLatestBlock } from "../../data/blockchain";
+import { blockchain, getDifficulty, getLatestBlock } from "../../data/blockchain";
+import findBlock from "./findBlock";
 
 export const generateNextBlock = (blockData: string) => {
   const previousBlock: Block = getLatestBlock();
   const nextIndex: number = previousBlock.index + 1;
   const nextTimestamp: number = new Date().getTime();
-  const nextHash: string = calculateBlockHash(nextIndex, previousBlock.hash, nextTimestamp, blockData);
-  const newBlock: Block = new Block(nextIndex, nextHash, previousBlock.hash, nextTimestamp, blockData);
+  const difficulty = getDifficulty(blockchain)
 
+  console.log(`[INFO] Generating a new block with difficulty ${difficulty}`)
+
+  const newBlock: Block = findBlock(
+    nextIndex,
+    previousBlock.hash,
+    nextTimestamp,
+    blockData,
+    difficulty,
+  );
   blockchain.push(newBlock);
 
   return newBlock;

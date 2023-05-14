@@ -14,6 +14,8 @@ export default function validateNewBlockIntegrity(newBlock: Block, previousBlock
       newBlock.previousHash,
       newBlock.timestamp,
       newBlock.data,
+      newBlock.difficulty,
+      newBlock.nonce,
     ) !== newBlock.hash
   ) {
     console.log("invalid hash: ")
