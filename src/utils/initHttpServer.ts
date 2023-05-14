@@ -30,14 +30,12 @@ const initHttpServer = (port: number, { privateKey, publicKey, address, neighbor
   })
 
   app.get("/blocks", (_: Request, res: Response) => {
-    console.log(blockchain)
     return res.render("pages/blocks", {
       blockchain
     })
   })
 
   app.get("/transactions", (_: Request, res: Response) => {
-    console.log(blockchain)
     res.render("pages/transactions")
   })
 
