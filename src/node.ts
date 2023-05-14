@@ -9,6 +9,7 @@ import RIPEMD160 from "ripemd160"
 import { Flag } from "./constants";
 import initUdpSocket from "./utils/initUdpSocket";
 import initHttpServer from "./utils/initHttpServer";
+import { EventEmitter } from "stream"
 
 const argv = minimist(process.argv.slice(2))
 
@@ -43,8 +44,8 @@ const nodeDetails = {
   privateKey,
   publicKey,
   address,
+  neighborPorts: NEIGHBOR_PORTS,
 }
-
 
 const udpSocket = initUdpSocket(
   NODE_PORT,
@@ -55,10 +56,4 @@ initHttpServer(
   NODE_PORT,
   nodeDetails,
 )
-
-setInterval(() => {
-  NEIGHBOR_PORTS.forEach((item: number) => {
-    udpSocket.send("Heartbeat", item)
-  })
-}, 10000)
 

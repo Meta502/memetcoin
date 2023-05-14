@@ -1,9 +1,14 @@
 import express, { Request, Response } from "express"
 import fs from "fs"
 
-const initHttpServer = (port: number, { privateKey, publicKey, address }) => {
+import { blockchain } from "../data/blockchain"
+import { generateNextBlock } from "./block/generateNextBlock"
+import broadcastLatestBlock from "./broadcast/broadcastBlock"
+
+const initHttpServer = (port: number, { privateKey, publicKey, address, neighborPorts }) => {
   const app = express()
 
+  app.use(express.json())
   app.set("view engine", "ejs")
 
   app.get("/", (_: Request, res: Response) => {
@@ -14,14 +19,25 @@ const initHttpServer = (port: number, { privateKey, publicKey, address }) => {
       address,
       privateKey: privateKey.toString("base64"),
       publicKey: publicKey.toString("base64"),
+      blockLength: blockchain.length,
     })
   })
 
+  app.post("/blocks", (req: Request, res: Response) => {
+    const newBlock = generateNextBlock(req.body.data);
+    broadcastLatestBlock(neighborPorts);
+    return res.status(201).json(newBlock);
+  })
+
   app.get("/blocks", (_: Request, res: Response) => {
-    res.render("pages/blocks")
+    console.log(blockchain)
+    return res.render("pages/blocks", {
+      blockchain
+    })
   })
 
   app.get("/transactions", (_: Request, res: Response) => {
+    console.log(blockchain)
     res.render("pages/transactions")
   })
 

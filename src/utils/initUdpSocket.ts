@@ -1,27 +1,44 @@
 import dgram from "node:dgram"
+import { MessageType } from "../schema/broadcast";
+import handleBlockchainResponse from "./block/handleBlockchainResponse";
+
+export const udpSocket = dgram.createSocket("udp4");
 
 const initUdpSocket = (port: number, { privateKey, publicKey, address }) => {
-  const server = dgram.createSocket("udp4");
-
-  server.on("error", (err) => {
+  udpSocket.on("error", (err) => {
     console.error(err)
-    server.close()
+    udpSocket.close()
   })
 
-  server.on("message", (msg, rinfo) => {
-    console.log(`[MESSAGE FROM (${rinfo.address}, ${rinfo.port})] ${msg}`)
+  udpSocket.on("message", (msg, rinfo) => {
+    try {
+      const message = JSON.parse(
+        msg.toString("utf8")
+      );
+
+      if (message.type === MessageType.RESPONSE_BLOCKCHAIN) {
+        return handleBlockchainResponse(message);
+      }
+    } catch (e) {
+      if (e instanceof SyntaxError) {
+        console.error("Malformed broadcast received")
+        return
+      } else {
+        throw e
+      }
+    }
   })
 
-  server.on("listening", () => {
-    const { address, port } = server.address()
+  udpSocket.on("listening", () => {
+    const { address, port } = udpSocket.address()
     console.log(`[INFO] (${address}, ${port}): Start listening to UDP messages`)
   })
 
-  server.bind(
+  udpSocket.bind(
     port
   )
 
-  return server
+  return udpSocket
 }
 
 export default initUdpSocket

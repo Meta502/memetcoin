@@ -9,7 +9,7 @@ const nodePath = path.resolve(__dirname, 'node.js')
 
 async function main() {
   // Randomly generate basePort between 1 to 65535
-  const basePort = Math.floor(Math.random() * 65535)
+  const basePort = argv["basePort"] || Math.floor(Math.random() * 65535)
   const ports = new Array()
 
   // Initiate array for storing process handles
