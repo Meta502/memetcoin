@@ -1,6 +1,8 @@
 import dgram from "node:dgram"
 import { MessageType } from "../schema/broadcast";
-import handleBlockchainResponse from "./block/handleBlockchainResponse";
+import handleBlockchainResponse from "./broadcast//handleBlockchainResponse";
+import handleLatestBlockQuery from "./broadcast/handleLatestBlockQuery";
+import handleChainQuery from "./broadcast/handleChainQuery";
 
 export const udpSocket = dgram.createSocket("udp4");
 
@@ -17,15 +19,23 @@ const initUdpSocket = (port: number, { privateKey, publicKey, address }) => {
       );
 
       if (message.type === MessageType.RESPONSE_BLOCKCHAIN) {
-        return handleBlockchainResponse(message);
+        return handleBlockchainResponse(message)
       }
+
+      if (message.type === MessageType.QUERY_ALL) {
+        return handleChainQuery(rinfo.port)
+      }
+
+      if (message.type === MessageType.QUERY_LATEST) {
+        return handleLatestBlockQuery(rinfo.port)
+      }
+
     } catch (e) {
       if (e instanceof SyntaxError) {
         console.error("Malformed broadcast received")
         return
-      } else {
-        throw e
       }
+      throw e
     }
   })
 

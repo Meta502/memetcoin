@@ -1,6 +1,8 @@
 import { addBlockToChain, getLatestBlock } from "../../data/blockchain";
-import replaceChain from "./replaceChain";
-import deserializeBlockchain from "./serializeBlockchain";
+import replaceChain from "../block/replaceChain";
+import deserializeBlockchain from "../block/deserializeBlockchain";
+import broadcast from "./broadcast";
+import { MessageType } from "../../schema/broadcast";
 
 export default function handleBlockchainResponse(message: any) {
   const newChain = deserializeBlockchain(message.blocks)
@@ -12,7 +14,6 @@ export default function handleBlockchainResponse(message: any) {
   const latestBlockReceived = newChain[newChain.length - 1]
   const currentLatestBlock = getLatestBlock()
 
-  // TODO: Refactor this nested if
   if (latestBlockReceived.index <= currentLatestBlock.index) {
     return console.log("[INFO] Received outdated blockchain. Ignoring...")
   }
@@ -25,8 +26,11 @@ export default function handleBlockchainResponse(message: any) {
   }
 
   if (newChain.length === 1) {
-    return console.log("[INFO] Orphaned block with greater index received. Querying chain from peers.")
-    // Create Query Block function
+    console.log("[INFO] Orphaned block with greater index received. Querying chain from peers.")
+
+    return broadcast(JSON.stringify({
+      type: MessageType.QUERY_ALL,
+    }))
   }
 
   console.log("[INFO] Received blockchain is longer than current blockchain")

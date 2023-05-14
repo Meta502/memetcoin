@@ -12,7 +12,6 @@ export default function replaceChain(newChain: Block[]) {
     console.log("Longer blockchain found. Replacing current blockchain with received blockchain")
     setBlockchain(newChain)
     broadcastLatestBlock()
-    // Broadcast here
   } else {
     console.log("Received invalid blockchain")
   }
