@@ -25,6 +25,6 @@ export const genesisBlock: Block = new Block(
   null,
   1684071643352,
   "genesis block",
-  8,
+  16,
   1,
 )
