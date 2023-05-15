@@ -1,0 +1,52 @@
+<html>
+  <head>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+
+  <body class="bg-gray-900 p-16 space-y-6">
+    <h1 class="text-2xl font-bold text-white">
+      Proof Of Work Simulator
+    </h1>
+
+    <div class="flex justify-between items-center">
+      <div class="flex space-x-3">
+        <a href="/" class="bg-purple-700 transition-all duration-350 hover:bg-purple-800 text-white px-4 py-2 rounded-lg">
+          Home
+        </a>
+
+        <a href="/blocks" class="bg-green-700 transition-all duration-350 hover:bg-green-800 text-white px-4 py-2 rounded-lg">
+          Blocks
+        </a> 
+
+        <a href="/transactions" class="bg-blue-700 transition-all duration-350 hover:bg-blue-800 text-white px-4 py-2 rounded-lg">
+          Pending Transactions
+        </a> 
+      </div>
+
+      <div class="flex space-x-3">
+        <a href="/wallet/create-transaction" class="bg-blue-700 transition-all duration-350 hover:bg-blue-800 text-white px-4 py-2 rounded-lg">
+          Create Transaction
+        </a>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-8 text-white"> 
+      <div class="bg-gray-800 w-full rounded-xl p-4 space-y-2">
+        <h2 class="font-bold">
+          Address
+        </h2>
+        <h3 class="text-4xl text-blue-200 space-y-2">
+          <%= address %>
+        </h3>
+      </div>
+      <div class="bg-gray-800 w-full rounded-xl p-4 space-y-2">
+        <h2 class="font-bold">
+          Balance
+        </h2>
+        <h3 class="text-4xl text-blue-200 space-y-2">
+          <%= balance %>
+        </h3>
+      </div>
+    </div>
+  </body>
+</html>

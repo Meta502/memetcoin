@@ -6,6 +6,6 @@ export default function validateBlockStructure(block: Block) {
     typeof block.hash === "string" &&
     typeof block.previousHash === "string" &&
     typeof block.timestamp === "number" &&
-    typeof block.data === "string"
+    typeof block.data === "object"
   )
 }

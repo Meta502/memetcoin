@@ -21,15 +21,9 @@ export class TxInput {
 }
 
 export class Transaction {
-  public id: string
-  public txInputs: TxInput[]
-  public txOutputs: TxOutput[]
-
-  constructor(id: string, txInputs: TxInput[], txOutputs: TxOutput[]) {
-    this.id = id
-    this.txInputs = txInputs
-    this.txOutputs = txOutputs
-  }
+  public id: string = ""
+  public txInputs: TxInput[] = []
+  public txOutputs: TxOutput[] = []
 }
 
 export class UnspentTxOutput {

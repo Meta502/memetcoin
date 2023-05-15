@@ -13,4 +13,5 @@ export default function updateUnspentTxOutputs(block: Block, unspentTxOuts: Unsp
     .filter((unspentTxOutput) => (
       !findUnspentTxOutputs(unspentTxOutput.txOutputId, unspentTxOutput.txOutputIndex, consumedTxOutputs)
     ))
+    .concat(newUnspentTxOutputs)
 }

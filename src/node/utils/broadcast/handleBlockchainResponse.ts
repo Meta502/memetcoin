@@ -1,8 +1,9 @@
-import { addBlockToChain, getLatestBlock } from "../../data/blockchain";
+import { addBlockToChain, getLatestBlock, setUTXO, unspentTxOutputs } from "../../data/blockchain";
 import replaceChain from "../block/replaceChain";
 import deserializeBlockchain from "../block/deserializeBlockchain";
 import broadcast from "./broadcast";
 import { MessageType } from "../../schema/broadcast";
+import updateUnspentTxOutputs from "../transaction/updateUnspentTxOutputs";
 
 export default function handleBlockchainResponse(message: any) {
   const newChain = deserializeBlockchain(message.blocks)
@@ -20,6 +21,8 @@ export default function handleBlockchainResponse(message: any) {
 
   if (currentLatestBlock.hash === latestBlockReceived.previousHash) {
     if (addBlockToChain(latestBlockReceived)) {
+      const updatedUTXO = updateUnspentTxOutputs(latestBlockReceived, unspentTxOutputs)
+      setUTXO(updatedUTXO)
       return console.log(`[INFO] Successfully committed new block with hash ${latestBlockReceived.hash}`)
     }
     return console.log("[WARN] Invalid block received. Ignoring...")

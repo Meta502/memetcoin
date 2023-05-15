@@ -1,9 +1,10 @@
 import express, { Request, Response } from "express"
 import fs from "fs"
 
-import { blockchain, getDifficulty } from "../data/blockchain"
+import { blockchain, getBalance, getDifficulty, transactions, unspentTxOutputs } from "../data/blockchain"
 import { generateNextBlock } from "./block/generateNextBlock"
 import broadcastLatestBlock from "./broadcast/broadcastBlock"
+import createTransaction from "./transaction/createTransaction"
 
 const initHttpServer = (port: number, { privateKey, publicKey, address }) => {
   const app = express()
@@ -24,6 +25,32 @@ const initHttpServer = (port: number, { privateKey, publicKey, address }) => {
     })
   })
 
+  app.get("/wallet", (_: Request, res: Response) => {
+    res.render("pages/wallet", {
+      address,
+      balance: getBalance(address, unspentTxOutputs),
+    })
+  })
+
+  app.get("/wallet/create-transaction", (_: Request, res: Response) => {
+    res.render("pages/createTransaction", {
+      address,
+      balance: getBalance(address, unspentTxOutputs),
+    })
+  })
+
+  app.post("/transactions", (req: Request, res: Response) => {
+    const transaction = createTransaction(
+      address,
+      req.body.target_address,
+      Number(req.body.amount),
+    )
+    console.log(transaction)
+    transactions.push(transaction)
+
+    res.status(201).json()
+  })
+
   app.get("/blocks", (_: Request, res: Response) => {
     return res.render("pages/blocks", {
       blockchain
@@ -31,7 +58,7 @@ const initHttpServer = (port: number, { privateKey, publicKey, address }) => {
   })
 
   app.post("/blocks", (req: Request, res: Response) => {
-    const newBlock = generateNextBlock(req.body.data);
+    const newBlock = generateNextBlock(transactions, address);
     broadcastLatestBlock();
     return res.status(201).json(newBlock);
   })

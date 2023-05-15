@@ -13,6 +13,7 @@ export default function validateTransactionInput(transactionInput: TxInput, tran
 
   const address = referencedUnspentTransactionOutput.address
 
+  console.log(address)
   const key = ec.keyFromPublic(address, "hex")
   return key.verify(transaction.id, transactionInput.signature)
 }
