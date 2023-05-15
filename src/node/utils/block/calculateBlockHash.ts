@@ -1,10 +1,11 @@
 import sha256 from "sha256";
+import { Transaction } from "../../schema/transaction";
 
 export default function calculateBlockHash(
   index: number,
   previousHash: string,
   timestamp: number,
-  data: string,
+  data: Transaction[],
   difficulty: number,
   nonce: number,
 ): string {

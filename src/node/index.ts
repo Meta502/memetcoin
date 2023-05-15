@@ -26,8 +26,8 @@ console.log = function(d) {
   log_stdout.write(util.format(d) + '\n');
 };
 
-const { privateKey, publicKey } = crypto.generateKeyPairSync('ec', {
-  namedCurve: 'sect233k1',
+export const { privateKey, publicKey } = crypto.generateKeyPairSync('ec', {
+  namedCurve: 'secp256k1',
   publicKeyEncoding: {
     type: 'spki',
     format: 'der'
@@ -37,6 +37,9 @@ const { privateKey, publicKey } = crypto.generateKeyPairSync('ec', {
     format: 'der',
   }
 });
+console.log("private: " + privateKey.toString("hex"))
+console.log("public: " + publicKey.toString("hex"))
+
 
 const address = new RIPEMD160().update(sha256(publicKey.toString("base64"))).digest("base64")
 

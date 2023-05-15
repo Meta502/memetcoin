@@ -1,10 +1,12 @@
 import { Block, genesisBlock } from "../schema/block";
+import { UnspentTxOutput } from "../schema/transaction";
 import validateNewBlockIntegrity from "../utils/validator/validateBlockIntegrity";
 
 const BLOCK_GENERATION_INTERVAL: number = 1;
 const DIFFICULTY_ADJUSTMENT_INTERVAL: number = 10;
 
 export let blockchain: Block[] = [genesisBlock]
+export let unspentTxOutputs: UnspentTxOutput[] = []
 
 export function setBlockchain(newChain: Block[]) {
   blockchain = newChain

@@ -4,3 +4,6 @@ export enum Flag {
   MALICIOUS = "malicious",
   NEIGHBOR_PORTS = "nodePorts"
 }
+
+export const COINBASE_AMOUNT = 50
+
