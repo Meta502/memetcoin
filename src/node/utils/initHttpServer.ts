@@ -5,7 +5,7 @@ import { blockchain, getDifficulty } from "../data/blockchain"
 import { generateNextBlock } from "./block/generateNextBlock"
 import broadcastLatestBlock from "./broadcast/broadcastBlock"
 
-const initHttpServer = (port: number, { privateKey, publicKey, address, neighborPorts }) => {
+const initHttpServer = (port: number, { privateKey, publicKey, address }) => {
   const app = express()
 
   app.use(express.json())

@@ -1,4 +1,4 @@
-import { Flag } from "../../constants";
+import { Flag } from "../../../constants";
 import { getLatestBlock } from "../../data/blockchain";
 import { MessageType } from "../../schema/broadcast";
 import minimist from "minimist";

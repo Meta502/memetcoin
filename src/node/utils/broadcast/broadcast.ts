@@ -1,4 +1,4 @@
-import { Flag } from "../../constants"
+import { Flag } from "../../../constants"
 import { udpSocket } from "../initUdpSocket"
 import minimist from "minimist"
 

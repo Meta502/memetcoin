@@ -2,10 +2,10 @@ import minimist from "minimist"
 import { ChildProcess, spawn } from "node:child_process"
 import path from "path"
 
-import { Flag } from "./constants"
+import { Flag } from "../constants"
 
 const argv = minimist(process.argv.slice(2))
-const nodePath = path.resolve(__dirname, 'node.js')
+const nodePath = path.resolve(process.cwd(), 'build/node/index.js')
 
 async function main() {
   // Randomly generate basePort between 1 to 65535

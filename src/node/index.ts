@@ -6,7 +6,7 @@ import crypto from "crypto"
 import sha256 from "sha256"
 import RIPEMD160 from "ripemd160"
 
-import { Flag } from "./constants";
+import { Flag } from "../constants";
 import initUdpSocket from "./utils/initUdpSocket";
 import initHttpServer from "./utils/initHttpServer";
 import { EventEmitter } from "stream"
@@ -44,7 +44,6 @@ const nodeDetails = {
   privateKey,
   publicKey,
   address,
-  neighborPorts: NEIGHBOR_PORTS,
 }
 
 const udpSocket = initUdpSocket(
