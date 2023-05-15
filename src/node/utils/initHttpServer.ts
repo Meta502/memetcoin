@@ -45,7 +45,6 @@ const initHttpServer = (port: number, { privateKey, publicKey, address }) => {
       req.body.target_address,
       Number(req.body.amount),
     )
-    console.log(transaction)
     transactions.push(transaction)
 
     res.status(201).json()
