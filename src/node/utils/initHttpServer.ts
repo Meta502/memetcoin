@@ -1,10 +1,12 @@
 import express, { Request, Response } from "express"
 import fs from "fs"
 
-import { blockchain, getBalance, getDifficulty, transactions, unspentTxOutputs } from "../data/blockchain"
+import { addToTransactionPool, blockchain, getBalance, getDifficulty, transactions, unspentTxOutputs } from "../data/blockchain"
 import { generateNextBlock } from "./block/generateNextBlock"
 import broadcastLatestBlock from "./broadcast/broadcastBlock"
 import createTransaction from "./transaction/createTransaction"
+import { Transaction, UnspentTxOutput } from "../schema/transaction"
+import broadcastTransactionPool from "./broadcast/broadcastTransactionPool"
 
 const initHttpServer = (port: number, { privateKey, publicKey, address }) => {
   const app = express()
@@ -29,6 +31,8 @@ const initHttpServer = (port: number, { privateKey, publicKey, address }) => {
     res.render("pages/wallet", {
       address,
       balance: getBalance(address, unspentTxOutputs),
+      unspentTxOutputs: unspentTxOutputs
+        .filter((unspentTxOutput: UnspentTxOutput) => unspentTxOutput.address === address)
     })
   })
 
@@ -45,7 +49,9 @@ const initHttpServer = (port: number, { privateKey, publicKey, address }) => {
       req.body.target_address,
       Number(req.body.amount),
     )
-    transactions.push(transaction)
+
+    addToTransactionPool(transaction)
+    broadcastTransactionPool()
 
     res.status(201).json()
   })

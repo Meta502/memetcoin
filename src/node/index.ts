@@ -1,13 +1,11 @@
 import minimist from "minimist"
 import util from "util"
 import fs from "fs"
-import crypto from "crypto"
 import ecdsa from "elliptic"
 
 import { Flag } from "../constants";
 import initUdpSocket from "./utils/initUdpSocket";
 import initHttpServer from "./utils/initHttpServer";
-import calculateAddressFromPublicKey from "./utils/calculateAddressFromPublicKey"
 
 const argv = minimist(process.argv.slice(2))
 

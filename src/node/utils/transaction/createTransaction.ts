@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { Transaction, TxInput, TxOutput, UnspentTxOutput } from "../../schema/transaction";
-import { unspentTxOutputs } from "../../data/blockchain";
+import { addToTransactionPool, unspentTxOutputs } from "../../data/blockchain";
 import generateTransactionHash from "./generateTransactionHash";
 import signTransactionInput from "./signTransactionInput";
 import { privateKey } from "../..";
@@ -52,6 +52,8 @@ export default function createTransaction(sourceAddress: string, receiverAddress
     txInput.signature = signTransactionInput(transaction, index, privateKey, unspentTxOutputs)
     return txInput
   })
+
+  addToTransactionPool(transaction)
 
   return transaction
 }

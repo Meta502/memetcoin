@@ -1,7 +1,8 @@
 import _ from "lodash";
 import { Block, genesisBlock } from "../schema/block";
-import { Transaction, UnspentTxOutput } from "../schema/transaction";
+import { Transaction, TxInput, TxOutput, UnspentTxOutput } from "../schema/transaction";
 import validateNewBlockIntegrity from "../utils/validator/validateBlockIntegrity";
+import validateTransaction from "../utils/validator/validateTransaction";
 
 const BLOCK_GENERATION_INTERVAL: number = 1;
 const DIFFICULTY_ADJUSTMENT_INTERVAL: number = 10;
@@ -28,6 +29,37 @@ export function addBlockToChain(newBlock: Block) {
     return true;
   } else {
     return false;
+  }
+}
+
+export function addToTransactionPool(transaction: Transaction) {
+  if (!validateTransaction(transaction, unspentTxOutputs)) {
+    console.log("[ERROR] Invalid transaction")
+    throw Error()
+  }
+  transactions.push(transaction)
+}
+
+export function hasTxIn(txIn: TxInput): boolean {
+  const foundTxIn = unspentTxOutputs.find((uTxO: UnspentTxOutput) => {
+    return uTxO.txOutputId === txIn.txOutputId && uTxO.txOutputIndex === txIn.txOutputIndex;
+  });
+  return foundTxIn !== undefined;
+}
+
+export function updateTransactionPool() {
+  const invalidTxs: Transaction[] = [];
+  for (const tx of transactions) {
+    for (const txIn of tx.txInputs) {
+      if (!hasTxIn(txIn)) {
+        invalidTxs.push(tx);
+        break;
+      }
+    }
+  }
+  if (invalidTxs.length > 0) {
+    console.log('removing the following transactions from txPool: %s', JSON.stringify(invalidTxs));
+    transactions = _.without(transactions, ...invalidTxs);
   }
 }
 

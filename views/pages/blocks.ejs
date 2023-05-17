@@ -52,11 +52,11 @@
         <hr>
         <div class="space-y-2">
           <% for (transaction of block.data) { %>
-            <div class="bg-gray-700 w-full rounded-xl p-4 space-y-2">
+            <div class="bg-gray-700 w-full rounded-xl p-6 space-y-2">
               <div class="space-y-2">
                 <h2 class="font-bold">Transaction Hash</h2>
                 <p>
-                  <span class="text-purple-300 font-mono bg-gray-700 py-0.5 px-1 rounded-lg">
+                  <span class="text-purple-300 font-mono bg-gray-700 py-0.5 px-1 rounded-lg font-mono">
                     <%= transaction.id %>
                   </span>
                 </p>
@@ -64,10 +64,10 @@
               <hr>
               <div class="space-y-2">
                 <% for (txOut of transaction.txOutputs) { %>
-                  <div class="flex space-x-8 w-full px-4 py-2 rounded-lg">
+                  <div class="flex space-x-8 w-full py-2 rounded-lg">
                     <div>
                       <p class="font-bold">Recipient</p>
-                      <p>
+                      <p class="font-mono">
                         <%= txOut.address %>
                       </p>
                     </div>

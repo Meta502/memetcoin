@@ -1,9 +1,10 @@
-import { addBlockToChain, getLatestBlock, setUTXO, unspentTxOutputs } from "../../data/blockchain";
+import { addBlockToChain, getLatestBlock, setUTXO, unspentTxOutputs, updateTransactionPool } from "../../data/blockchain";
 import replaceChain from "../block/replaceChain";
 import deserializeBlockchain from "../block/deserializeBlockchain";
-import broadcast from "./broadcast";
+import broadcast, { broadcastGossip } from "./broadcast";
 import { MessageType } from "../../schema/broadcast";
 import updateUnspentTxOutputs from "../transaction/updateUnspentTxOutputs";
+import broadcastLatestBlock from "./broadcastBlock";
 
 export default function handleBlockchainResponse(message: any) {
   const newChain = deserializeBlockchain(message.blocks)
@@ -23,6 +24,8 @@ export default function handleBlockchainResponse(message: any) {
     if (addBlockToChain(latestBlockReceived)) {
       const updatedUTXO = updateUnspentTxOutputs(latestBlockReceived, unspentTxOutputs)
       setUTXO(updatedUTXO)
+      updateTransactionPool()
+      broadcastLatestBlock()
       return console.log(`[INFO] Successfully committed new block with hash ${latestBlockReceived.hash}`)
     }
     return console.log("[WARN] Invalid block received. Ignoring...")
@@ -37,5 +40,6 @@ export default function handleBlockchainResponse(message: any) {
   }
 
   console.log("[INFO] Received blockchain is longer than current blockchain")
+  broadcastLatestBlock()
   return replaceChain(newChain)
 }
