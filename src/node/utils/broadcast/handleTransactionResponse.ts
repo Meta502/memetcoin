@@ -21,7 +21,7 @@ const isValidTxForPool = (tx: Transaction, aTtransactionPool: Transaction[]): bo
 
   for (const txIn of tx.txInputs) {
     if (containsTxIn(txPoolIns, txIn)) {
-      console.log('txIn already found in the txPool');
+      console.log(`[INFO] Transaction Input with Output ID ${txIn.txOutputId} and Index ${txIn.txOutputIndex} already exists. Ignoring...`);
       return false;
     }
   }

@@ -44,13 +44,11 @@ const initHttpServer = (port: number, { privateKey, publicKey, address }) => {
   })
 
   app.post("/transactions", (req: Request, res: Response) => {
-    const transaction = createTransaction(
+    createTransaction(
       address,
       req.body.target_address,
       Number(req.body.amount),
     )
-
-    addToTransactionPool(transaction)
     broadcastTransactionPool()
 
     res.status(201).json()
@@ -69,7 +67,10 @@ const initHttpServer = (port: number, { privateKey, publicKey, address }) => {
   })
 
   app.get("/transactions", (_: Request, res: Response) => {
-    res.render("pages/transactions")
+    res.render("pages/transactions", {
+      transactions,
+      port,
+    })
   })
 
   app.listen(port, () => {

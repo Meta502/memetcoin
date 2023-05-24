@@ -9,7 +9,8 @@ import initHttpServer from "./utils/initHttpServer";
 
 const argv = minimist(process.argv.slice(2))
 
-const NODE_PORT = argv[Flag.PORT]
+export const BASE_PORT = argv["basePort"]
+export const NODE_PORT = argv[Flag.PORT]
 
 const log_file = fs.createWriteStream(process.cwd() + `/logs/node-${NODE_PORT}.log`, { flags: 'w' });
 const log_stdout = process.stdout;

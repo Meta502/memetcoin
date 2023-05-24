@@ -25,8 +25,11 @@ export const generateNextBlock = (blockData: Transaction[], address: string) => 
     transactions,
     difficulty,
   );
+
+  console.log(`[INFO] Adding new block with hash ${newBlock.hash} to blockchain`)
   blockchain.push(newBlock);
 
+  console.log(`[INFO] Updating UTXO store to reflect new block state...`)
   const updatedUTXO = updateUnspentTxOutputs(newBlock, unspentTxOutputs)
   setUTXO(updatedUTXO)
 
