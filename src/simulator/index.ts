@@ -107,7 +107,7 @@ udpSocket.on("message", (msg, rinfo) => {
       })
     }
   } catch (e) {
-    throw e
+    console.error(e)
   }
 })
 
