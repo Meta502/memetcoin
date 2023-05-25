@@ -14,10 +14,10 @@ const port = argv["basePort"] || Math.floor(Math.random() * 65535)
 let processes: ChildProcess[] = []
 let ports: number[] = []
 
-async function startProcess(numNodes: number, port: number, ports: number[]) {
+async function startProcess(numNodes: number, port: number, ports: number[], difficulty: number) {
   for (let i = 0; i < numNodes; i++) {
     const numSpawnedProcess = processes.length
-    const node = spawn("node", [nodePath, `-p=${port + numSpawnedProcess}`, `--nodePorts=${ports.join(",")}`, `--basePort=${port}`])
+    const node = spawn("node", [nodePath, `-p=${port + numSpawnedProcess}`, `--nodePorts=${ports.join(",")}`, `--basePort=${port}`, `--initialDifficulty=${difficulty || 16}`])
 
     node.stdout.on("data", (data) => {
       console.log(`[INFO] [Node-${port + numSpawnedProcess}]: ${data}`)
@@ -50,14 +50,14 @@ io.of("/main").on("connection", (socket) => {
   socket.join("main")
   socket.emit("connAck", ports)
 
-  socket.on("start-simulator", (numNodes) => {
+  socket.on("start-simulator", ({ numNodes, difficulty }) => {
     if (processes.length > 0) return false
 
     ports = []
     for (let i = 0; i < numNodes; i++) {
       ports.push(port + 1 + i);
     }
-    const start = startProcess(numNodes, port + 1, ports)
+    const start = startProcess(numNodes, port + 1, ports, difficulty)
     if (!start) {
       return {
         message: "Simulator is already started, please stop the simulator first",

@@ -1,5 +1,9 @@
 import { Transaction } from "./transaction";
 
+import minimist from "minimist";
+
+const argv = minimist(process.argv.slice(2))
+
 export class Block {
   public index: number;
   public hash: string;
@@ -27,6 +31,6 @@ export const genesisBlock: Block = new Block(
   null,
   1684071643352,
   [],
-  16,
+  argv["initialDifficulty"] || 16,
   1,
 )
