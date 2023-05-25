@@ -11,59 +11,30 @@ const argv = minimist(process.argv.slice(2))
 const nodePath = path.resolve(__dirname, '../node/index.js')
 const port = argv["basePort"] || Math.floor(Math.random() * 65535)
 
-async function main() {
-  // Randomly generate basePort between 1 to 65535
-  const basePort = port + 1
-  const ports = new Array()
+let processes: ChildProcess[] = []
+let ports: number[] = []
 
-  // Initiate array for storing process handles
-  const processes: ChildProcess[] = []
-
-  const numNodes = argv[Flag.NODES]
+async function startProcess(numNodes: number, port: number, ports: number[]) {
   for (let i = 0; i < numNodes; i++) {
-    ports.push(basePort + i);
-  }
-
-  const numHonest = Math.floor(numNodes * (1 - argv[Flag.MALICIOUS]))
-  const numMalicious = Math.floor(numNodes * argv[Flag.MALICIOUS])
-
-  for (let i = 0; i < numHonest; i++) {
     const numSpawnedProcess = processes.length
-    const node = spawn("node", [nodePath, `-p=${basePort + numSpawnedProcess}`, `--nodePorts=${ports.join(",")}`, `--basePort=${port}`])
+    const node = spawn("node", [nodePath, `-p=${port + numSpawnedProcess}`, `--nodePorts=${ports.join(",")}`, `--basePort=${port}`])
 
     node.stdout.on("data", (data) => {
-      console.log(`[INFO] [Node-${basePort + numSpawnedProcess}]: ${data}`)
+      console.log(`[INFO] [Node-${port + numSpawnedProcess}]: ${data}`)
     })
 
     node.stderr.on("data", (data) => {
-      console.error(`[ERROR] [Node-${basePort + numSpawnedProcess}]: ${data}`)
+      console.error(`[ERROR] [Node-${port + numSpawnedProcess}]: ${data}`)
     })
 
     node.on("close", (code) => {
-      console.log(`node on port ${basePort + numSpawnedProcess} crashed with code ${code}`)
+      console.log(`node on port ${port + numSpawnedProcess} crashed with code ${code}`)
     })
 
     processes.push(node)
   }
 
-  for (let i = 0; i < numMalicious; i++) {
-    const numSpawnedProcess = processes.length
-    const node = spawn("node", [nodePath, `-p ${basePort + numSpawnedProcess}`, `--nodePorts ${ports.join(",")}`, `--basePort=${port}`])
-
-    node.stdout.on("data", (data) => {
-      console.log(`[INFO] [Node-${basePort + numSpawnedProcess}]: ${data}`)
-    })
-
-    node.stderr.on("data", (data) => {
-      console.error(`[ERROR] [Node-${basePort + numSpawnedProcess}]: ${data}`)
-    })
-
-    node.on("close", (code) => {
-      console.log(`node on port ${basePort + numSpawnedProcess} crashed with code ${code}`)
-    })
-
-    processes.push(node)
-  }
+  return true
 }
 
 const httpServer = http.createServer()
@@ -74,14 +45,41 @@ const io = new Server(httpServer, {
 })
 
 io.of("/main").on("connection", (socket) => {
-  const ports: Number[] = []
   const numNodes = argv[Flag.NODES]
-  for (let i = 0; i < numNodes; i++) {
-    ports.push(port + i + 1);
-  }
 
   socket.join("main")
   socket.emit("connAck", ports)
+
+  socket.on("start-simulator", (numNodes) => {
+    if (processes.length > 0) return false
+
+    ports = []
+    for (let i = 0; i < numNodes; i++) {
+      ports.push(port + 1 + i);
+    }
+    const start = startProcess(numNodes, port + 1, ports)
+    if (!start) {
+      return {
+        message: "Simulator is already started, please stop the simulator first",
+        type: "error",
+      }
+    } else {
+      socket.emit("connAck", ports)
+      return {
+        message: "Simulator successfully started,"
+      }
+    }
+  })
+
+  socket.on("stop-simulator", (_) => {
+    for (const proc of processes) {
+      proc.kill("SIGTERM")
+    }
+    ports = []
+    processes = []
+    socket.emit("connAck", ports)
+  })
+
 })
 
 httpServer.listen(4555, () => {
@@ -117,4 +115,3 @@ udpSocket.bind(
   port
 )
 
-main();
